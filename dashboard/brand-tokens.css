@@ -1,0 +1,188 @@
+/* =========================================================================
+   Dashboard design tokens
+   -------------------------------------------------------------------------
+   Every color the triage dashboard uses lives here. No hex literal appears in
+   index.html or app.js, so re-theming the whole page is a single-file edit.
+
+   RAMP SHAPE, READ THIS BEFORE PICKING A COLOR
+   Every family runs 50, 100, 200, 300, then 600, 700, 800, 900.
+   There is NO 400 and NO 500 step. Light steps are surfaces; dark steps are
+   marks and text. If you want a mid tone, do not invent one: apply a ramp
+   step at partial opacity at the use site rather than creating a one-off
+   tint token.
+   ========================================================================= */
+
+:root {
+  /* ---- Blue, civic ink -------------------------------------------------
+     Primary civic ink, sky surfaces, charts, and plan states. */
+  --blue-50:  #f0f1f9;
+  --blue-100: #e9eaf5;
+  --blue-200: #e1e3f2;
+  --blue-300: #daddef;
+  --blue-600: #5759a6;
+  --blue-700: #3d3c86;
+  --blue-800: #262067;
+  --blue-900: #12004a;
+
+  /* ---- Gold -----------------------------------------------------------
+     Money, approvals, value, and controlled attention. */
+  --gold-50:  #f9f0e7;
+  --gold-100: #f4e9dd;
+  --gold-200: #f5e5d3;
+  --gold-300: #ebdbc9;
+  --gold-600: #805b2c;
+  --gold-700: #633f0c;
+  --gold-800: #442600;
+  --gold-900: #260f00;
+
+  /* ---- Green, sage ----------------------------------------------------
+     Verified, operationally healthy, and public-record surfaces. */
+  --green-50:  #f2fcf3;
+  --green-100: #edf4ee;
+  --green-200: #e4eee6;
+  --green-300: #d5e2d7;
+  --green-600: #4f6c54;
+  --green-700: #465c4a;
+  --green-800: #425244;
+  --green-900: #202921;
+
+  /* ---- Rose, danger ---------------------------------------------------
+     Danger, destructive, and hard risk states. Fee loss and shrinkage
+     chips belong here. */
+  --rose-50:  #fff6f6;
+  --rose-100: #ffedec;
+  --rose-200: #f8e6e6;
+  --rose-300: #f2e0df;
+  --rose-600: #8b5050;
+  --rose-700: #6c3435;
+  --rose-800: #4f191c;
+  --rose-900: #320006;
+
+  /* ---- Cream, warm neutral -------------------------------------------
+     Default paper and card backgrounds, plus warm dark neutrals.
+     The page is warm off-white. Never pure white. */
+  --cream-50:  #fffbf4;
+  --cream-100: #fcf8f1;
+  --cream-200: #f5f1ea;
+  --cream-300: #eeebe4;
+  --cream-600: #8c8579;
+  --cream-700: #776e5b;
+  --cream-800: #5d574c;
+  --cream-900: #453f34;
+
+  /* ---- Slate, muted purple -------------------------------------------
+     Muted neutral text, support surfaces, and dark-stage contrast.
+     This is the Legacy System stage family. */
+  --slate-50:  #faf7fb;
+  --slate-100: #f0edf1;
+  --slate-200: #ebe6ec;
+  --slate-300: #ded9df;
+  --slate-600: #827586;
+  --slate-700: #6b5e6e;
+  --slate-800: #57465b;
+  --slate-900: #3f3342;
+
+  /* ---- Orange, warning -----------------------------------------------
+     Warning, watch, and caution states before danger. */
+  --orange-50:  #fff1e7;
+  --orange-100: #ffe8d9;
+  --orange-200: #ffdcc9;
+  --orange-300: #f7d2be;
+  --orange-600: #ad6a44;
+  --orange-700: #90502a;
+  --orange-800: #773a10;
+  --orange-900: #5f2800;
+
+  /* ---- Semantic roles -------------------------------------------------
+     Only for repeated page, surface, border, focus, and control defaults.
+     One-off tints stay ramp utilities. */
+  --background:            var(--cream-200);
+  --foreground:            var(--blue-900);
+  --display-foreground:    var(--blue-800);
+  --page-bg:               var(--background);
+  --surface-base:          var(--cream-100);
+  --surface-subtle:        var(--cream-50);
+  --surface-muted:         var(--cream-300);
+  --border:                color-mix(in oklab, var(--blue-900) 10%, transparent);
+  --surface-border:        color-mix(in oklab, var(--blue-900) 10%, transparent);
+  --surface-border-strong: color-mix(in oklab, var(--blue-900) 20%, transparent);
+  --ring:                  color-mix(in oklab, var(--blue-900) 24%, transparent);
+  --control-bg:            var(--cream-50);
+  --control-placeholder:   var(--slate-700);
+
+  /* ---- Controls -------------------------------------------------------
+     Button and control defaults. A filled accent control is blue-800 with
+     cream-50 text. */
+  --ctl-accent:            var(--blue-800);
+  --ctl-on-accent:         var(--cream-50);
+  --ctl-ink:               var(--foreground);
+  --ctl-soft:              var(--blue-200);
+  --ctl-filled-accent:     var(--ctl-accent);
+  --ctl-on-filled-accent:  var(--ctl-on-accent);
+
+  /* ---- Card tones, from /brand/surface -------------------------------
+     Each tone pairs a background with a readable foreground. */
+  --tone-cream-bg: var(--cream-100); --tone-cream-fg: var(--blue-800);
+  --tone-sky-bg:   var(--blue-200);  --tone-sky-fg:   var(--blue-800);
+  --tone-gold-bg:  var(--gold-300);  --tone-gold-fg:  var(--gold-900);
+  --tone-sage-bg:  var(--green-300); --tone-sage-fg:  var(--green-900);
+  --tone-slate-bg: var(--slate-700); --tone-slate-fg: var(--cream-50);
+  --tone-ink-bg:   var(--blue-700);  --tone-ink-fg:   var(--cream-50);
+
+  /* ---- Type -----------------------------------------------------------
+     In the Next.js app, --font-dm-sans and --font-dm-serif-text are
+     supplied by next/font. These aliases pick those up when present and
+     fall back to the webfont families when this file is used standalone,
+     so the same declaration works in both places.
+
+     DM Serif Text is DISPLAY HEADINGS ONLY (h1 through h4), always
+     weight 400, always tracking normal. DM Sans is everything else, at
+     400 / 500 / 700 only. There is no 600 and no 800 in the brand. */
+  --font-sans: var(--font-dm-sans, 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif);
+  --font-display: var(--font-dm-serif-text, 'DM Serif Text', Georgia, 'Times New Roman', serif);
+  --font-code: ui-monospace, 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', monospace;
+
+  --tracking-metric: 0em;
+  --tracking-label: .18em;
+  --tracking-label-compact: .155em;
+
+  /* ---- Shape ----------------------------------------------------------
+     The live card language is a flat 1rem. Nothing in the system is
+     rounder than --radius-2xl. */
+  --radius-sm:  .25rem;   /*  4px */
+  --radius-md:  .375rem;  /*  6px */
+  --radius-lg:  .5rem;    /*  8px */
+  --radius-xl:  .75rem;   /* 12px */
+  --radius-2xl: 1rem;     /* 16px, the default card radius */
+  --radius-full: 9999px;
+
+  --border-width-1: 1px;
+  --border-width-2: 2px;
+
+  /* ---- Depth ----------------------------------------------------------
+     Ghost shadow geometry from tokens.css, tinted with blue-900 at 7%.
+     There is no neutral-black shadow in the brand. */
+  --ghost-shadow-rest-y:      .875rem;
+  --ghost-shadow-rest-blur:   2.125rem;
+  --ghost-shadow-hover-y:     1.125rem;
+  --ghost-shadow-hover-blur:  2.625rem;
+  --ghost-shadow-active-y:    .625rem;
+  --ghost-shadow-active-blur: 1.5rem;
+
+  --shadow-rest:   0 var(--ghost-shadow-rest-y)   var(--ghost-shadow-rest-blur)   color-mix(in oklab, var(--blue-900) 7%, transparent);
+  --shadow-hover:  0 var(--ghost-shadow-hover-y)  var(--ghost-shadow-hover-blur)  color-mix(in oklab, var(--blue-900) 7%, transparent);
+  --shadow-active: 0 var(--ghost-shadow-active-y) var(--ghost-shadow-active-blur) color-mix(in oklab, var(--blue-900) 7%, transparent);
+
+  /* ---- Motion ---------------------------------------------------------- */
+  --ease-soft: cubic-bezier(.2, .8, .2, 1);
+  --dur-fast: .18s;
+  --dur-med:  .32s;
+  --dur-slow: .42s;
+
+  /* ---- Layout ---------------------------------------------------------- */
+  --page-max: 77.5rem;
+  --section-gap: clamp(3.5rem, 7vw, 6.25rem);
+  --landing-section-gap: calc(var(--section-gap) * .68);
+  --focus-outline-offset: 3px;
+  --lift-hover-offset: -2px;
+}

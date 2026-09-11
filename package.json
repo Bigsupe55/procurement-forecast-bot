@@ -1,0 +1,41 @@
+{
+  "name": "procurement-forecast-bot",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Monitors U.S. federal procurement forecasts (Treasury OSDBU, GSA Acquisition Gateway, DHS APFS) and predicts upcoming recompetes from expiring contracts, then scores and emails a ranked digest of the ones worth a small vendor's time.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "tsx src/run.ts",
+    "dry": "cross-env DRY_RUN=1 tsx src/run.ts",
+    "sample:treasury": "tsx scripts/sample-treasury.ts",
+    "sample:predictor": "tsx scripts/sample-predictor.ts",
+    "sample:gateway": "tsx scripts/sample-gateway.ts",
+    "sample:dhs": "tsx scripts/sample-dhs.ts",
+    "sample:scored": "tsx scripts/sample-scored.ts",
+    "preview:llm": "tsx scripts/preview-llm.ts",
+    "probe:usaspending": "tsx scripts/probe-usaspending.ts",
+    "test:email": "tsx scripts/test-email.ts",
+    "verify:dedup": "tsx scripts/verify-dedup.ts",
+    "verify:smtp": "tsx scripts/verify-smtp.ts",
+    "dashboard": "tsx scripts/dashboard.ts",
+    "dashboard:export": "tsx scripts/export-dashboard.ts",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.115.0",
+    "dotenv": "^16.6.1",
+    "nodemailer": "^6.9.14"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "@types/nodemailer": "^6.4.15",
+    "cross-env": "^7.0.3",
+    "tsx": "^4.16.0",
+    "typescript": "^5.5.0",
+    "vitest": "^2.0.0"
+  }
+}

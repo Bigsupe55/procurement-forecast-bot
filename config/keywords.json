@@ -1,0 +1,22 @@
+{
+  "_comment": "Case-insensitive substring matches against title + description. 'direct' terms are this vendor's core (procure-to-pay, financial systems, payments, transparency). 'adjacent' is broader IT modernization. 'exclude' demotes obvious non-fits (physical/field services) so they do not clutter the digest.",
+  "direct": [
+    "procure-to-pay", "procure to pay", "purchase-to-pay", "contract lifecycle", "contract management",
+    "contract writing", "financial management system", "financial system", "financial management",
+    "enterprise resource planning", "erp", "accounts payable", "invoice processing", "disbursement",
+    "payment processing", "payments modernization", "vendor payment", "grants management",
+    "spend management", "e-procurement", "eprocurement", "acquisition management", "acquisition system",
+    "transparency", "open data", "audit readiness", "cash management", "treasury management",
+    "reconciliation", "general ledger", "financial reporting", "spend analytics"
+  ],
+  "adjacent": [
+    "software development", "application development", "system integration", "modernization",
+    "cloud migration", "data analytics", "business intelligence", "case management", "workflow automation",
+    "digital services", "it modernization", "legacy system", "systems design", "custom software"
+  ],
+  "exclude": [
+    "janitorial", "landscaping", "snow removal", "lawn", "hvac", "roofing", "guard services",
+    "uniform", "furniture", "vehicle", "fuel", "medical supplies", "laboratory", "printing press",
+    "ammunition", "firearm", "food service", "elevator", "pest control", "waste removal"
+  ]
+}

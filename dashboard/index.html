@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Forecast triage</title>
+<link rel="stylesheet" href="/brand-tokens.css">
+<style>
+/* ---------------------------------------------------------------------------
+   Forecast triage. Styled entirely from brand-tokens.css: no hex literal
+   appears below. If a color looks wrong, the fix is in the token file.
+
+   Brand rules being followed here:
+     - DM Serif Text is display headings only, weight 400. DM Sans everywhere
+       else, at 400/500/700 only.
+     - The page is warm off-white, never pure white.
+     - Ramps have no 400/500 step. Mid tones come from opacity at the use site.
+     - Status hue supports a state; the text label still carries the meaning.
+     - Color stays in the proof marks, not whole surfaces.
+--------------------------------------------------------------------------- */
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--page-bg);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--display-foreground);
+  margin: 0;
+}
+h1 { font-size: 2.25rem; line-height: 1.1; }
+h2 { font-size: 1.25rem; }
+
+.wrap { max-width: 96rem; margin: 0 auto; padding: 2.5rem 1.5rem 5rem; }
+
+.label {
+  font-size: .6875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
+  color: var(--cream-700);
+}
+
+/* ---- header ---- */
+.head { margin-bottom: 1.75rem; }
+.head .label { display: block; margin-bottom: .5rem; }
+.head-meta {
+  margin-top: .5rem;
+  font-size: .8125rem;
+  color: var(--cream-700);
+}
+.head-meta code {
+  font-family: var(--font-code);
+  font-size: .78125rem;
+  background: var(--surface-muted);
+  border-radius: var(--radius-sm);
+  padding: .1rem .35rem;
+}
+
+/* ---- structural notice: the SAM gate ---- */
+.gate {
+  display: flex;
+  gap: .875rem;
+  align-items: flex-start;
+  background: var(--tone-gold-bg);
+  color: var(--tone-gold-fg);
+  border: var(--border-width-1) solid color-mix(in oklab, var(--gold-800) 18%, transparent);
+  border-radius: var(--radius-2xl);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.75rem;
+}
+.gate-mark {
+  flex: none;
+  font-size: .6875rem;
+  font-weight: 700;
+  letter-spacing: var(--tracking-label-compact);
+  text-transform: uppercase;
+  background: var(--gold-800);
+  color: var(--cream-50);
+  border-radius: var(--radius-full);
+  padding: .25rem .625rem;
+  margin-top: .1rem;
+}
+.gate p { margin: 0; font-size: .875rem; }
+.gate p + p { margin-top: .35rem; }
+.gate strong { font-weight: 700; }
+
+/* ---- metric row ---- */
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+}
+.metric {
+  background: var(--surface-base);
+  border: var(--border-width-1) solid var(--surface-border);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-rest);
+  padding: 1.125rem 1.25rem;
+}
+.metric.tone-gold  { background: var(--tone-gold-bg);  color: var(--tone-gold-fg); }
+.metric.tone-sage  { background: var(--tone-sage-bg);  color: var(--tone-sage-fg); }
+.metric.tone-sky   { background: var(--tone-sky-bg);   color: var(--tone-sky-fg); }
+.metric .label { color: currentColor; opacity: .72; }
+.metric-value {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  line-height: 1.15;
+  margin-top: .375rem;
+  letter-spacing: var(--tracking-metric);
+}
+.metric-foot { font-size: .75rem; margin-top: .25rem; opacity: .75; }
+
+/* ---- filters ---- */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .625rem;
+  align-items: center;
+  background: var(--surface-base);
+  border: var(--border-width-1) solid var(--surface-border);
+  border-radius: var(--radius-2xl);
+  padding: .875rem 1rem;
+  margin-bottom: 1.25rem;
+}
+input[type="search"], select, textarea {
+  font-family: var(--font-sans);
+  font-size: .875rem;
+  color: var(--foreground);
+  background: var(--control-bg);
+  border: var(--border-width-1) solid var(--surface-border);
+  border-radius: var(--radius-lg);
+  padding: .5rem .75rem;
+}
+input[type="search"] { flex: 1 1 18rem; min-width: 12rem; }
+input[type="search"]::placeholder { color: var(--control-placeholder); }
+:focus-visible {
+  outline: var(--border-width-2) solid var(--ring);
+  outline-offset: var(--focus-outline-offset);
+}
+.filter-count { margin-left: auto; font-size: .8125rem; color: var(--cream-700); }
+
+.btn {
+  font-family: var(--font-sans);
+  font-size: .8125rem;
+  font-weight: 500;
+  color: var(--ctl-ink);
+  background: transparent;
+  border: var(--border-width-1) solid var(--surface-border-strong);
+  border-radius: var(--radius-full);
+  padding: .375rem .875rem;
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-soft), color var(--dur-fast) var(--ease-soft);
+}
+.btn:hover { background: var(--surface-muted); }
+.btn[aria-pressed="true"] {
+  background: var(--ctl-accent);
+  color: var(--ctl-on-accent);
+  border-color: var(--ctl-accent);
+}
+
+/* ---- table ---- */
+.table-wrap {
+  background: var(--surface-base);
+  border: var(--border-width-1) solid var(--surface-border);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-rest);
+  overflow-x: auto;
+}
+table { width: 100%; border-collapse: collapse; }
+thead th {
+  text-align: left;
+  font-size: .6875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
+  color: var(--cream-700);
+  padding: .875rem 1rem;
+  border-bottom: var(--border-width-1) solid var(--surface-border);
+  white-space: nowrap;
+}
+tbody td {
+  padding: .875rem 1rem;
+  border-bottom: var(--border-width-1) solid var(--surface-border);
+  vertical-align: top;
+}
+tbody tr:last-child td { border-bottom: 0; }
+tbody tr.is-skipped { opacity: .48; }
+tbody tr.row-main:hover { background: var(--surface-subtle); }
+
+.cell-title {
+  font-weight: 500;
+  color: var(--foreground);
+  background: none;
+  border: 0;
+  padding: 0;
+  font-family: var(--font-sans);
+  font-size: .9375rem;
+  text-align: left;
+  cursor: pointer;
+  line-height: 1.35;
+}
+.cell-title:hover { text-decoration: underline; }
+.cell-sub { font-size: .78125rem; color: var(--cream-700); margin-top: .25rem; }
+
+/* Agency monogram: identity without logos, tone derived from the name. */
+.mono {
+  width: 2.25rem; height: 2.25rem;
+  flex: none;
+  display: grid; place-items: center;
+  border-radius: var(--radius-lg);
+  font-size: .75rem;
+  font-weight: 700;
+  letter-spacing: .02em;
+}
+.mono-0 { background: var(--tone-sky-bg);   color: var(--tone-sky-fg); }
+.mono-1 { background: var(--tone-gold-bg);  color: var(--tone-gold-fg); }
+.mono-2 { background: var(--tone-sage-bg);  color: var(--tone-sage-fg); }
+.mono-3 { background: var(--tone-slate-bg); color: var(--tone-slate-fg); }
+.mono-4 { background: var(--tone-ink-bg);   color: var(--tone-ink-fg); }
+.mono-5 { background: var(--tone-cream-bg); color: var(--tone-cream-fg); }
+
+.badge {
+  display: inline-block;
+  font-size: .6875rem;
+  font-weight: 500;
+  letter-spacing: var(--tracking-label-compact);
+  text-transform: uppercase;
+  border-radius: var(--radius-full);
+  padding: .1875rem .5625rem;
+  white-space: nowrap;
+}
+.elig-open        { background: var(--green-100);  color: var(--green-900);  border: var(--border-width-1) solid var(--green-300); }
+.elig-sb-set-aside{ background: var(--orange-100); color: var(--orange-900); border: var(--border-width-1) solid var(--orange-300); }
+.elig-blocked-cert{ background: var(--rose-100);   color: var(--rose-800);   border: var(--border-width-1) solid var(--rose-300); }
+.elig-unknown     { background: var(--slate-100);  color: var(--slate-900);  border: var(--border-width-1) solid var(--slate-300); }
+
+/* Triage shown as a read-only badge in the static export. */
+.state-pursue { background: var(--blue-200);  color: var(--blue-800);  border: var(--border-width-1) solid var(--blue-300); }
+.state-watch  { background: var(--gold-200);  color: var(--gold-900);  border: var(--border-width-1) solid var(--gold-300); }
+.state-skip   { background: var(--slate-200); color: var(--slate-900); border: var(--border-width-1) solid var(--slate-300); }
+
+/* Score bar: the kit's utilization pattern, with a marker at the priority
+   threshold. Clearing the bar is good here, so above-threshold reads gold
+   (value, controlled attention) and below reads blue (plan). */
+.score { min-width: 8rem; }
+.score-top { display: flex; align-items: baseline; gap: .375rem; }
+.score-num { font-weight: 700; font-size: .9375rem; font-variant-numeric: tabular-nums; }
+.score-of { font-size: .6875rem; color: var(--cream-700); }
+.score-track {
+  position: relative;
+  height: .5rem;
+  margin-top: .375rem;
+  background: var(--surface-muted);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+.score-fill { height: 100%; border-radius: var(--radius-full); background: var(--blue-300); }
+.score-fill.is-priority { background: var(--gold-600); }
+.score-mark {
+  position: absolute; top: -.125rem; bottom: -.125rem;
+  width: var(--border-width-2);
+  background: color-mix(in oklab, var(--blue-900) 42%, transparent);
+}
+
+.triage { display: flex; gap: .3125rem; }
+.tbtn {
+  font-family: var(--font-sans);
+  font-size: .6875rem;
+  font-weight: 500;
+  letter-spacing: .02em;
+  border-radius: var(--radius-full);
+  border: var(--border-width-1) solid var(--surface-border-strong);
+  background: transparent;
+  color: var(--ctl-ink);
+  padding: .25rem .625rem;
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-soft), color var(--dur-fast) var(--ease-soft);
+}
+.tbtn:hover { background: var(--surface-muted); }
+.tbtn[aria-pressed="true"][data-state="pursue"] { background: var(--blue-800);  color: var(--cream-50); border-color: var(--blue-800); }
+.tbtn[aria-pressed="true"][data-state="watch"]  { background: var(--gold-700);  color: var(--cream-50); border-color: var(--gold-700); }
+.tbtn[aria-pressed="true"][data-state="skip"]   { background: var(--slate-700); color: var(--cream-50); border-color: var(--slate-700); }
+
+/* ---- expanded detail ---- */
+.detail td { background: var(--surface-subtle); padding-top: 0; }
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: 1rem 1.5rem;
+  padding: 1rem 0 .5rem;
+}
+.detail-grid .label { display: block; margin-bottom: .1875rem; }
+.detail-desc { font-size: .875rem; max-width: 60rem; margin: 0 0 .75rem; }
+.signals { display: flex; flex-wrap: wrap; gap: .375rem; margin-bottom: .875rem; }
+.signal {
+  font-size: .6875rem;
+  background: var(--blue-100);
+  color: var(--blue-800);
+  border-radius: var(--radius-full);
+  padding: .1875rem .5625rem;
+}
+.note-row { display: flex; gap: .625rem; align-items: flex-start; padding-bottom: 1rem; }
+.note-row textarea { flex: 1 1 auto; min-height: 3.25rem; resize: vertical; font-size: .875rem; }
+a { color: var(--blue-700); }
+
+.empty { padding: 3rem 1rem; text-align: center; color: var(--cream-700); }
+.more { display: block; margin: 1.25rem auto 0; }
+.saving { font-size: .75rem; color: var(--cream-700); min-height: 1rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="head">
+    <span class="label">Federal procurement forecast</span>
+    <h1>Forecast triage</h1>
+    <p class="head-meta" id="head-meta">Loading...</p>
+  </header>
+
+  <section class="gate" id="gate" hidden>
+    <span class="gate-mark" id="gate-mark">Gate</span>
+    <div>
+      <p id="gate-line"></p>
+      <p id="gate-sub"></p>
+    </div>
+  </section>
+
+  <section class="metrics" id="metrics"></section>
+
+  <section class="filters">
+    <input type="search" id="q" placeholder="Search title, agency, NAICS, description..." aria-label="Search opportunities">
+    <select id="f-source" aria-label="Filter by source"><option value="">All sources</option></select>
+    <select id="f-elig" aria-label="Filter by eligibility">
+      <option value="">All eligibility</option>
+      <option value="open">Full and open</option>
+      <option value="sb-set-aside">Small business</option>
+      <option value="blocked-cert">Certification required</option>
+      <option value="unknown">Unknown</option>
+    </select>
+    <select id="f-state" aria-label="Filter by triage state">
+      <option value="">All items</option>
+      <option value="untriaged">Untriaged</option>
+      <option value="pursue">Pursuing</option>
+      <option value="watch">Watching</option>
+      <option value="skip">Skipped</option>
+    </select>
+    <button class="btn" id="f-priority" aria-pressed="false">Priority only</button>
+    <button class="btn" id="f-reset">Reset</button>
+    <span class="filter-count" id="count"></span>
+  </section>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Opportunity</th>
+          <th scope="col">Value</th>
+          <th scope="col">Timing</th>
+          <th scope="col">Can we bid</th>
+          <th scope="col">Score</th>
+          <th scope="col">Triage</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <div class="empty" id="empty" hidden>Nothing matches these filters.</div>
+  </div>
+  <button class="btn more" id="more" hidden>Show more</button>
+
+</div>
+<script src="/app.js"></script>
+</body>
+</html>

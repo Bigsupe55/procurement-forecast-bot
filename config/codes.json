@@ -1,0 +1,11 @@
+{
+  "_comment": "NAICS and PSC codes that signal a fit for this vendor. 'direct' = bullseye (financial systems, payments, procurement software / IT-services development). 'adjacent' = broader IT/consulting worth surfacing. Verified against live Treasury forecast data 2026-07-22.",
+  "naics": {
+    "direct": ["518210", "541511", "541512", "522320"],
+    "adjacent": ["541519", "541611", "513210", "518210"]
+  },
+  "psc": {
+    "direct": ["DA01", "DA10", "DB01", "DB02", "DC01", "DC10", "DD01", "DE01", "DE10", "DF01", "DF10", "DG01", "DG10", "DH01", "DH10", "DJ01", "DJ10"],
+    "adjacent": ["R401", "R408", "R423", "R424", "R425", "R431", "R699", "R705"]
+  }
+}

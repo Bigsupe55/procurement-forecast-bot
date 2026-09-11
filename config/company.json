@@ -1,0 +1,5 @@
+{
+  "_comment": "Your company's federal readiness. These two facts decide whether an opportunity is REACHABLE, which is independent of whether it is appealing. Keep them in sync with the 'Federal readiness' section of config/profile.md, which states the same facts in prose for the LLM pass. Ships with the sample company's values: unregistered and uncertified.",
+  "samRegistered": false,
+  "certifications": []
+}

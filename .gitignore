@@ -1,0 +1,19 @@
+node_modules/
+.env
+*.local
+dist/
+.DS_Store
+npm-debug.log*
+# NOTE: data/seen.json is intentionally NOT ignored — it is the committed
+# dedup state that lets the bot remember what it already alerted on.
+#
+# Same goes for data/pursuit.json: your triage decisions have to reach CI, or
+# the weekly digest cannot know what you already skipped.
+#
+# data/snapshot.json IS ignored: it is derived from a run, it is megabytes, and
+# only the local dashboard reads it. Regenerate with `npm run dry`.
+data/snapshot.json
+
+# Exported dashboards are shareable point-in-time copies of the same data, so
+# they do not belong in the repo either. Regenerate with `npm run dashboard:export`.
+dashboard-export/
