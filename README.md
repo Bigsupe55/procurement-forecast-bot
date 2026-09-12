@@ -27,7 +27,39 @@ Relevance alone is not enough — most of the federal IT forecast technically fi
 
 The email leads with the top items in full — each with a plain-English `signals:` line — and collapses the rest into a counted one-line list. Every point traces to a rule, and the scoring is unit-tested.
 
-An optional **LLM judgment pass** sits on top of that: it takes the top 40 by score and asks Claude whether each is *really* your work, returning a fit score, a one-line assessment, and a suggested next step. Rules can tell that a $100M contract matches NAICS 541512; they can't tell that it's generic IT staffing rather than financial transparency. **It ships switched off** — set `ENABLE_LLM=1` and `ANTHROPIC_API_KEY` to turn it on, and replace `config/profile.md` with your own capability profile first, because the sample one describes a company that does not exist.
+An optional **LLM judgment pass** sits on top of that, described below.
+
+## The LLM pass, and why it ships off
+
+Rules can tell that a $100M contract matches NAICS 541512. They cannot tell that it is
+generic IT staffing rather than financial-transparency work. So an optional pass sends
+the top items by deterministic score to Claude and asks whether each is *really* this
+vendor's work, returning a fit score, a one-line assessment, and a suggested next step.
+
+Four decisions in that pass are worth more than the pass itself:
+
+**It is the last stage, not the first.** Roughly 2,000 items clear the keyword and NAICS
+filter each run. Sending all of them to a model would cost real money to rank a list
+that is 97% noise. The deterministic scorer does the cutting and the model only ever
+sees a shortlist, which is also why the ranking stays reproducible when the pass is off.
+
+**`LLM_MAX_ITEMS` is a cost ceiling, not a tuning knob.** It hard-caps items per run at
+40. Agencies publish in bursts, and one Monday where DHS adds 250 opportunities must not
+turn into a surprise bill. The cap is enforced before the request is built.
+
+**The company profile is a cached system prompt, and it is the only thing the model
+knows.** `config/profile.md` is the model's entire view of the vendor: what it sells, who
+buys it, what it explicitly does *not* do, and the structural gaps that make a contract
+unreachable regardless of fit. It is plain prose in a file, so changing what the model
+believes is an edit, not a deploy. `npm run preview:llm` renders the exact request that
+would be sent without calling the API.
+
+**It ships switched off.** It runs only when `ENABLE_LLM=1` *and* `ANTHROPIC_API_KEY`
+are both set; with either missing, nothing calls the API and the bot behaves exactly as
+it does with the pass absent. That default is deliberate: a model judging against an
+unreviewed profile is worse than no model, because it launders a bad premise into
+confident-sounding output. Replace `config/profile.md` with your own before enabling it.
+The one that ships describes a company that does not exist.
 
 ## Quick start
 
