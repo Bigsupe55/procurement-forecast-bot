@@ -1,5 +1,7 @@
 # Procurement Forecast Bot
 
+[![CI](https://github.com/Bigsupe55/procurement-forecast-bot/actions/workflows/ci.yml/badge.svg)](https://github.com/Bigsupe55/procurement-forecast-bot/actions/workflows/ci.yml)
+
 Surfaces **planned** U.S. federal procurement, before any RFP is published, that fits a specific small vendor, so you can engage early: capability statement, RFI response, or a call to the bureau's small-business specialist while requirements are still being shaped.
 
 Built for a small municipal govtech company whose product is nothing like most of the federal IT forecast, which is exactly the hard case: the NAICS codes match thousands of items and almost none of them are real. The interesting problem here is not fetching the data, it is throwing away 97% of it without discarding the 3% that matters.

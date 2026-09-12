@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch: {}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - run: npm ci
+
+      # No network and no secrets needed: every source parser is tested against
+      # recorded fixtures, so CI never touches an agency endpoint.
+      - name: Unit tests
+        run: npm test
+
+      - name: Typecheck
+        run: npm run typecheck

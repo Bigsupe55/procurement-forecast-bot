@@ -1,10 +1,13 @@
 name: Forecast monitor
 
-# Weekly is plenty — agency forecasts and contract end-dates move slowly.
+# Manual-only in this public snapshot, because the job needs SMTP secrets that
+# are not set here and a scheduled failure every Monday helps nobody. In a real
+# deployment you add the secrets and uncomment the schedule: weekly is plenty,
+# since agency forecasts and contract end-dates move slowly.
 on:
-  schedule:
-    - cron: "0 12 * * 1" # Mondays 12:00 UTC
-  workflow_dispatch: {} # allow manual runs from the Actions tab
+  # schedule:
+  #   - cron: "0 12 * * 1" # Mondays 12:00 UTC
+  workflow_dispatch: {} # run on demand from the Actions tab
 
 permissions:
   contents: write # needed to commit the updated dedup state back
