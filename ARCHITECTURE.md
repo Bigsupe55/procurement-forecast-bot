@@ -82,7 +82,7 @@ Node + TypeScript, run with `tsx` (no build step). Native `fetch` for every API 
 | `src/core/state.ts` | Load/save/prune `data/seen.json`. |
 | `src/core/digest.ts` | Renders the email (baseline-aware, HTML + text). |
 | `src/core/email.ts` | SMTP send, or print when `DRY_RUN=1`. |
-| `src/core/fingerprint.ts` | Stable dedup hash (ported from TLaaS indexer). |
+| `src/core/fingerprint.ts` | Stable dedup hash (normalize, join, hash). |
 | `src/config.ts` | Env + tunables; loads `.env` locally. |
 | `config/codes.json`, `config/keywords.json` | The relevance targeting. Edit these to retarget. |
 | `data/seen.json` | Committed dedup state. Do NOT gitignore it. |
